@@ -43,7 +43,7 @@ jobs:
 
     - name: List published files
       run: |
-        ls -R ./publish
+        ls -R /home/runner/work/BlazorWasmEditor/BlazorWasmEditor/MyBlazorApp/publish
 
     # Step 6: Deploy the published app to GitHub Pages
     - name: Deploy to GitHub Pages
