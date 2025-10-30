@@ -46,5 +46,5 @@ jobs:
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         branch: gh-pages  # Deploys to the `gh-pages` branch
-        folder:  publish/wwwroot   # Path to the published output
+        folder:  ./publish/wwwroot   # Path to the published output
         token: ${{ secrets.GITHUB_TOKEN }}  # GitHub token for authentication
