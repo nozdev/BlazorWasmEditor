@@ -39,7 +39,7 @@ jobs:
     - name: Publish the Blazor WASM Project
       run: |
         cd MyBlazorApp
-        dotnet publish -c Release -o ./publish
+        dotnet publish -c Release -o /home/runner/work/BlazorWasmEditor/BlazorWasmEditor/MyBlazorApp/publish
 
     - name: List published files
       run: |
