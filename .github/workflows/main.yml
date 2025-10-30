@@ -41,22 +41,10 @@ jobs:
         cd MyBlazorApp
         dotnet publish -c Release -o ./publish
 
-    # Step 6: Install Node.js (needed for CodeMirror or other frontend libraries)
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'  # Compatible version of Node.js
-
-    # Step 7: Install npm dependencies (if using CodeMirror, etc.)
-    - name: Install npm dependencies
-      run: |
-        cd MyBlazorApp
-        npm install
-
-    # Step 8: Deploy the published app to GitHub Pages
+    # Step 6: Deploy the published app to GitHub Pages
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
-        branch: gh-pages  # Deploys to the gh-pages branch
+        branch: gh-pages  # Deploys to the `gh-pages` branch
         folder: ./MyBlazorApp/publish/wwwroot  # Path to the published output
-        token: ${{ secrets.GITHUB_TOKEN }}  # Token for authentication
+        token: ${{ secrets.GITHUB_TOKEN }}  # GitHub token for authentication
