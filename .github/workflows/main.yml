@@ -41,6 +41,10 @@ jobs:
         cd MyBlazorApp
         dotnet publish -c Release -o ./publish
 
+    - name: List published files
+      run: |
+        ls -R ./publish
+
     # Step 6: Deploy the published app to GitHub Pages
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
