@@ -29,6 +29,17 @@ jobs:
         dotnet new blazorwasm -n MyBlazorApp
         cd MyBlazorApp
 
+    # Step 5: Create a new branch and copy the source files to that branch
+    - name: Create or Checkout new branch for source files
+      run: |
+        git fetch origin
+        git checkout -b my-blazor-app-branch  # You can name this branch as you like
+
+    # Step 6: Copy the entire MyBlazorApp folder into the new branch
+    - name: Copy MyBlazorApp source files to new branch
+      run: |
+        cp -r MyBlazorApp/* ./  # Copy all source files from MyBlazorApp to the root of the new branch
+
     # Step 4: Build the Blazor WASM Project
     - name: Build Blazor WebAssembly Project
       run: |
