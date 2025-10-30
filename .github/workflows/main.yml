@@ -1,0 +1,54 @@
+name: Build and Deploy C# WASM Editor
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout the code
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    # Step 2: Set up .NET 9.0 SDK
+    - name: Set up .NET 9.0 SDK
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '9.0'  # Specify .NET 9.0 version
+
+    # Step 3: Restore .NET dependencies
+    - name: Restore .NET dependencies
+      run: dotnet restore
+
+    # Step 4: Install Node.js dependencies (for CodeMirror)
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'  # Ensure this is a compatible version for CodeMirror
+
+    - name: Install npm dependencies
+      run: |
+        npm install
+
+    # Step 5: Build the project
+    - name: Build the Blazor WASM Project
+      run: dotnet build --configuration Release
+
+    # Step 6: Publish the Blazor WASM project to a folder
+    - name: Publish the Blazor WASM App
+      run: dotnet publish -c Release -o ./publish
+
+    # Step 7: Deploy to GitHub Pages (or any other platform)
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4.1.3
+      with:
+        branch: gh-pages  # Deploys to the `gh-pages` branch
+        folder: ./publish/wwwroot
+        token: ${{ secrets.GITHUB_TOKEN }}
