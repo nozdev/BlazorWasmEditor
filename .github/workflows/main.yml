@@ -30,10 +30,15 @@ jobs:
         cd MyBlazorApp
 
     # Step 5: Create a new branch and copy the source files to that branch
-    - name: Create or Checkout new branch for source files
+    - name: Check if 'my-blazor-app-branch' exists and create it
       run: |
         git fetch origin
-        git checkout -b my-blazor-app-branch  # You can name this branch as you like
+        # Check if branch exists
+        if ! git show-ref --verify --quiet refs/heads/my-blazor-app-branch; then
+          git checkout -b my-blazor-app-branch
+        else
+          git checkout my-blazor-app-branch
+        fi
 
     # Step 6: Copy the entire MyBlazorApp folder into the new branch
     - name: Copy MyBlazorApp source files to new branch
