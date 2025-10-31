@@ -34,7 +34,7 @@ jobs:
       run: |
         cd MyBlazorApp
         dotnet publish -c Release -o ./publish
-        ls -R ./MyBlazorApp/publish  # Correct path to the publish directory
+        ls -R ./publish  # Correct path to the publish directory
 
     # Step 5: List published files to verify the output
     - name: List published files
