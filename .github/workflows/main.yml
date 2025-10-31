@@ -34,6 +34,7 @@ jobs:
       run: |
         cd MyBlazorApp
         dotnet publish -c Release -o ./publish
+        ls -R ./publish  # List the files to ensure the publish folder exists
 
     # Step 5: List published files to verify the output
     - name: List published files
