@@ -3,10 +3,10 @@ name: Build and Deploy C# WASM App
 on:
   push:
     branches:
-      - main
+      - my-blazor-app-branch
   pull_request:
     branches:
-      - main
+      - my-blazor-app-branch
 
 jobs:
   build:
@@ -34,17 +34,17 @@ jobs:
       run: |
         cd MyBlazorApp
         dotnet publish -c Release -o ./publish
-        ls -R ./publish  # List the files to ensure the publish folder exists
+        ls -R ./MyBlazorApp/publish  # Correct path to the publish directory
 
     # Step 5: List published files to verify the output
     - name: List published files
       run: |
-        ls -R ./publish
+        ls -R ./MyBlazorApp/publish  # Correct path to the publish directory
 
     # Step 6: Deploy to GitHub Pages
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         branch: gh-pages  # The branch to deploy to
-        folder: ./publish/wwwroot  # Path to the published output
+        folder: ./MyBlazorApp/publish/wwwroot  # Correct folder to deploy
         token: ${{ secrets.GITHUB_TOKEN }}
