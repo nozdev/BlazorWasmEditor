@@ -1,4 +1,4 @@
-name: Create, Build, and Deploy C# WASM Editor
+name: Create, Build, and Deploy C# WASM App
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout the code from the repository
+    # Step 1: Checkout the code
     - name: Checkout Code
       uses: actions/checkout@v2
 
@@ -21,45 +21,49 @@ jobs:
     - name: Set up .NET 9.0 SDK
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '9.0'  # Use .NET 9.0 SDK
+        dotnet-version: '9.0'
 
-    # Step 3: Create a new Blazor WebAssembly project
+    # Step 3: Create the Blazor WASM Project
     - name: Create Blazor WebAssembly Project
       run: |
         dotnet new blazorwasm -n MyBlazorApp
         cd MyBlazorApp
 
-    # Step 4: Build the Blazor WASM Project
+    # Step 6: Create a new branch and push the code to the new branch
+    - name: Push the Blazor WASM app to a new branch
+      run: |
+        # Ensure we are on the right directory
+        cd MyBlazorApp
+        git checkout -b my-blazor-app-branch
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+        git add .
+        git commit -m "Add Blazor WebAssembly app"
+        git push origin my-blazor-app-branch
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # Step 4: Build the Blazor WebAssembly Project
     - name: Build Blazor WebAssembly Project
       run: |
         cd MyBlazorApp
         dotnet build --configuration Release
 
-    # Step 5: Create a new branch if it doesn't exist and checkout
-    - name: Check if 'my-blazor-app-branch' exists and create it
+    # Step 5: Publish the Blazor WASM Project to a folder
+    - name: Publish the Blazor WASM Project
       run: |
-        git fetch origin
-        # Check if the branch exists
-        if ! git show-ref --verify --quiet refs/heads/my-blazor-app-branch; then
-          git checkout -b my-blazor-app-branch
-        else
-          git checkout my-blazor-app-branch
-        fi
+        cd MyBlazorApp
+        dotnet publish -c Release -o ./publish
 
-    # Step 6: Copy the MyBlazorApp source files into the new branch
-    - name: Copy MyBlazorApp source files to the new branch
+    # Step 7: List published files to verify the output
+    - name: List published files
       run: |
-        cp -r MyBlazorApp/* ./  # Copy all source files from MyBlazorApp to the root of the new branch
+        ls -R ./publish
 
-    # Step 7: List the files to verify
-    - name: List files after copy
-      run: ls -R .  # Verify that the files have been copied to the current directory
-
-    # Step 8: Commit and push the changes to the new branch
-    - name: Commit and Push the Source Files to New Branch
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git add -A
-        git commit -m "Add Blazor WebAssembly source files to my-blazor-app-branch"
-        git push origin my-blazor-app-branch  # Push to the new branch
+    # Step 8: (Optional) Deploy to GitHub Pages
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: gh-pages  # The branch to deploy to
+        folder: ./publish/wwwroot  # Path to the published output
+        token: ${{ secrets.GITHUB_TOKEN }}
