@@ -3,10 +3,10 @@ name: Build and Deploy C# WASM App
 on:
   push:
     branches:
-      - my-blazor-app-branch
+      - main
   pull_request:
     branches:
-      - my-blazor-app-branch
+      - main
 
 jobs:
   build:
