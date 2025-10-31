@@ -1,12 +1,12 @@
-name: Create, Build, and Deploy C# WASM App
+name: Build and Deploy C# WASM App
 
 on:
   push:
     branches:
-      - main
+      - my-blazor-app-branch
   pull_request:
     branches:
-      - main
+      - my-blazor-app-branch
 
 jobs:
   build:
@@ -23,44 +23,24 @@ jobs:
       with:
         dotnet-version: '9.0'
 
-    # Step 3: Create the Blazor WASM Project
-    - name: Create Blazor WebAssembly Project
-      run: |
-        dotnet new blazorwasm -n MyBlazorApp
-        cd MyBlazorApp
-
-    # Step 6: Create a new branch and push the code to the new branch
-    - name: Push the Blazor WASM app to a new branch
-      run: |
-        # Ensure we are on the right directory
-        cd MyBlazorApp
-        git checkout -b my-blazor-app-branch
-        git config user.name "GitHub Actions"
-        git config user.email "actions@github.com"
-        git add .
-        git commit -m "Add Blazor WebAssembly app"
-        git push origin my-blazor-app-branch
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    # Step 4: Build the Blazor WebAssembly Project
+    # Step 3: Build the Blazor WebAssembly Project
     - name: Build Blazor WebAssembly Project
       run: |
         cd MyBlazorApp
         dotnet build --configuration Release
 
-    # Step 5: Publish the Blazor WASM Project to a folder
+    # Step 4: Publish the Blazor WASM Project to a folder
     - name: Publish the Blazor WASM Project
       run: |
         cd MyBlazorApp
         dotnet publish -c Release -o ./publish
 
-    # Step 7: List published files to verify the output
+    # Step 5: List published files to verify the output
     - name: List published files
       run: |
         ls -R ./publish
 
-    # Step 8: (Optional) Deploy to GitHub Pages
+    # Step 6: Deploy to GitHub Pages
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
